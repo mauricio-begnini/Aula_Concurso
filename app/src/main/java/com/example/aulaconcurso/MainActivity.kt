@@ -50,51 +50,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen() {
-    var fimDeJogo by remember {
-        mutableStateOf(false)
-    }
-    var vitoriasEquipe1 by remember {
-        mutableStateOf(0)
-    }
-    var vitoriasEquipe2 by remember {
-        mutableStateOf(0)
-    }
-    var pontosEquipe1 by remember {
-        mutableStateOf(0)
-    }
-    var pontosEquipe2 by remember {
-        mutableStateOf(0)
-    }
-    val adicionarPontos: (Int, Int) -> Unit = { equipe, pontos ->
-        if (equipe == 0) {
-            pontosEquipe1 += pontos
-            if (pontosEquipe1 >= 12) {
-                fimDeJogo = true
-                vitoriasEquipe1++
-            }
-        } else {
-            pontosEquipe2 += pontos
-            if (pontosEquipe2 >= 12) {
-                fimDeJogo = true
-                vitoriasEquipe2++
-            }
-        }
-    }
-
-    val zerarVitorias: () -> Unit = {
-        pontosEquipe1 = 0
-        pontosEquipe2 = 0
-        vitoriasEquipe1 = 0
-        vitoriasEquipe2 = 0
-        fimDeJogo = false
-    }
-
-    val zerarPlacar: () -> Unit = {
-        pontosEquipe1 = 0
-        pontosEquipe2 = 0
-        fimDeJogo = false
-    }
-
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.SpaceBetween,
@@ -107,17 +62,17 @@ fun MainScreen() {
         Column() {
             Equipes()
             Spacer(modifier = Modifier.height(32.dp))
-            Placar(equipe1 = pontosEquipe1, equipe2 = pontosEquipe2)
+            Placar(equipe1 = 0, equipe2 = 0)
         }
         Column(modifier = Modifier.padding(12.dp)) {
-            Pontuar(pontos = 1, adicionarPontos = adicionarPontos, fimDeJogo = fimDeJogo)
-            Pontuar(pontos = 3, adicionarPontos = adicionarPontos, fimDeJogo = fimDeJogo)
-            Pontuar(pontos = 6, adicionarPontos = adicionarPontos, fimDeJogo = fimDeJogo)
-            Pontuar(pontos = 9, adicionarPontos = adicionarPontos, fimDeJogo = fimDeJogo)
-            Pontuar(pontos = 12, adicionarPontos = adicionarPontos, fimDeJogo = fimDeJogo)
+            Pontuar(pontos = 1, adicionarPontos = { a, b -> }, fimDeJogo = false)
+            Pontuar(pontos = 3, adicionarPontos = { a, b -> }, fimDeJogo = false)
+            Pontuar(pontos = 6, adicionarPontos = { a, b -> }, fimDeJogo = false)
+            Pontuar(pontos = 9, adicionarPontos = { a, b -> }, fimDeJogo = false)
+            Pontuar(pontos = 12, adicionarPontos = { a, b -> }, fimDeJogo = false)
         }
-        NumeroVitorias(vitoriasEquipe1 = vitoriasEquipe1, vitoriasEquipe2 = vitoriasEquipe2)
-        ReiniciarJogo(zerarVitorias = zerarVitorias, zerarPlacar = zerarPlacar)
+        NumeroVitorias(vitoriasEquipe1 = 0, vitoriasEquipe2 = 0)
+        ReiniciarJogo(zerarVitorias = {  }, zerarPlacar = { })
     }
 }
 
@@ -160,7 +115,7 @@ fun Pontuar(
                 Text(text = "Nosso")
             }
             val texto = when (pontos) {
-                1 -> "Rodada simples"
+                1 -> "Um Ponto"
                 3 -> "Truco"
                 6 -> "Seis"
                 9 -> "Nove"
@@ -173,8 +128,6 @@ fun Pontuar(
         }
     }
 }
-
-
 
 @Composable
 fun NumeroVitorias(
